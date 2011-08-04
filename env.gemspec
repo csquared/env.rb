@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Chris Continanza"]
   s.email       = ["christopher.continanza@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Manage your ENV with ease}
+  s.description = %q{Allows your to manage many ENV vars by declaring them as dependencies on ENV vars and then enforcing those dependencies.  Supports wrapping URIs with support methods.}
 
   s.rubyforge_project = "env"
 
