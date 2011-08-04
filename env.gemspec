@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "env/version"
 
 Gem::Specification.new do |s|
-  s.name        = "env"
+  s.name        = "env.rb"
   s.version     = Env::VERSION
   s.authors     = ["Chris Continanza"]
   s.email       = ["christopher.continanza@gmail.com"]
