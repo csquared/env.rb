@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Manage your ENV with ease}
   s.description = %q{Allows your to manage many ENV vars by declaring them as dependencies on ENV vars and then enforcing those dependencies.  Supports wrapping URIs with support methods.}
 
-  s.rubyforge_project = "env"
+  s.rubyforge_project = "env.rb"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
