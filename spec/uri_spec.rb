@@ -1,6 +1,18 @@
 require_relative '../lib/env'
 
 describe Env, 'uri support' do
+  context "with a value FOO that is not a URI" do
+    before do
+      Env.instance_eval do
+        export 'FOO', 'bar'
+      end
+      Env.enforce
+    end
+
+    it "should not wrap it" do
+      lambda { ENV['FOO'].scheme }.should raise_error(::NoMethodError)
+    end
+  end
 
   context "with a value FOO that is a URI" do
     URL = 'http://username:password@this.domain.example.com/path?var=val'
@@ -14,6 +26,11 @@ describe Env, 'uri support' do
 
     it "should leave the original value unchanged" do
       ENV['FOO'].should == URL
+    end
+
+    it "should return scheme://host for #base_uri and #url" do
+      ENV['FOO'].base_uri.should == 'http://this.domain.example.com'
+      ENV['FOO'].url.should == 'http://this.domain.example.com'
     end
 
     it "should respond to #scheme with the scheme'" do

@@ -1,3 +1,0 @@
-export 'BAZ'
-export 'FOO', 'bar'
-export 'URL', 'http://username:password@this.domain.example.com/path?var=val'

@@ -11,10 +11,6 @@ module Env
   @@enforced     = false
 
   class << self
-    def dependencies
-      @@dependencies
-    end
-
     def [](key)
       _raise(key) unless dependencies.include? key 
       @@env[key]
@@ -23,18 +19,6 @@ module Env
     def []=(key,value)
       _raise(key) unless dependencies.include? key 
       @@env[key] = uri?(value) ? proxify(value) : value
-    end
-
-    def uri?(value)
-      begin 
-        URI.parse(value) 
-      rescue URI::InvalidURIError 
-        false
-      end
-    end
-
-    def proxify(value)
-      UriProxy.new(value)
     end
 
     def export(key, value = nil)
@@ -68,6 +52,18 @@ module Env
     def _raise(key)
       raise EnvironmentError, "#{key} is not a declared depency, add it to your Envfile"
     end
+
+    def uri?(value)
+      value.to_s.match(/^\w+:\/\//)
+    end
+
+    def proxify(value)
+      UriProxy.new(value)
+    end
+
+    def dependencies
+      @@dependencies
+    end
   end
 
   class UriProxy < BasicObject
@@ -78,6 +74,11 @@ module Env
       @original = uri
       @uri = ::URI.parse(uri)
     end
+
+    def base_uri
+      "#{@uri.scheme}://#{@uri.host}"
+    end
+    alias url base_uri
 
     def method_missing(method, *args, &block)
       @original.send(method, *args, &block) 

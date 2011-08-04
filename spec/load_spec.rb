@@ -1,5 +1,4 @@
 require_relative '../lib/env'
-#require 'fakefs'
 
 describe Env, '::load!' do
   def envfile(string)
