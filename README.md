@@ -1,3 +1,5 @@
+### Note: I am practicing Readme Driven Development here so don't expect all features to work until 1.0
+
 # Env.rb
 Managing your ENVironment
 
@@ -40,13 +42,13 @@ your Envfile to a shell-compatible format, and executing scripts within your env
     ENV['HELLO_WORLD']            # => nil
     Env.enforce
     ENV['HELLO_WORLD']
-    # => EnvironmentError: HELLO_WORLD is not a declared environment dependency
+    # => EnvironmentError: HELLO_WORLD is not a declared dependency
 
     ENV['TEST'] = 'overriding' 
-    # => EnvironmentError: TEST is not a declared environment dependency
+    # => EnvironmentError: TEST is not a declared dependency
 
-    Env.eval do
-      export 'TEXT', '15', :immutable => true
+    Env.instance_eval do
+      export 'TEXT', '15'
       # same as export 'TEXT', '15', :mutable => false
     end
 
