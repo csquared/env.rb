@@ -56,14 +56,12 @@ your Envfile to a shell-compatible format, and executing scripts within your env
 ## Built-in support for URIs
 
 ### in Envfile
-    export "SERVICE_URL", 'http://username:password@example.com/"
-    export "SERVICE_URI", 'http://username:password@example.com/"
     export "SERVICE",     'http://username:password@example.com/"
 
 ### in your Ruby Script 
-    ENV["SERVICE_URI"]         #=> 'http://username:password@example.com/"
     ENV['SERVICE']             #=> 'http://username:password@example.com/"
-    ENV['SERVICE'].url         #=> 'http://username:password@example.com/"
+    ENV['SERVICE'].base_uri    #=> 'http://example.com/"
+    ENV['SERVICE'].url         #=> 'http://example.com/"
     ENV['SERVICE'].user        #=> 'username'
     ENV['SERVICE'].password    #=> 'password'
     ENV['SERVICE'].host        #=> 'example.com'
