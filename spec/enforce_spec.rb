@@ -17,6 +17,11 @@ describe Env, "::enforce" do
     it "should return nil for ENV['FOO']" do
       ENV['FOO'].should eql(nil)
     end
+
+    it "should allow you to set it" do
+      ENV['FOO'] = 'bar'
+      ENV['FOO'].should eql('bar')
+    end
   end
 
   context "with initialized dependency FOO=bar" do
