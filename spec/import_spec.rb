@@ -7,6 +7,8 @@ describe Env, 'import' do
     end
   end
 
+  after { File.unlink('Envfile') }
+
   context "with an import statement" do
     before do
       ENV['FOO'] = 'bar'
