@@ -7,8 +7,10 @@ describe Env, '::load!' do
     end
   end
 
-  it "should return false" do
-    Env.load!.should be_false
+  context "with no Envfile" do
+    it "should return false" do
+      Env.load!.should be_false
+    end
   end
 
   context "with a simple Envfile" do

@@ -26,6 +26,10 @@ module Env
       @@env[key] = uri?(value) ? proxify(value) : value
     end
 
+    def import(key)
+      export(key, ENV.get(key))  
+    end
+
     def load!
       @@enforced or Env.enforce
       eval File.read("Envfile") if File.exist?("Envfile")
