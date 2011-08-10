@@ -33,7 +33,7 @@ describe Env, 'uri support' do
       ENV['FOO'].url.should == 'http://this.domain.example.com'
     end
 
-    it "should respond to #scheme with the scheme'" do
+    it "should respond to #scheme with the scheme" do
       ENV['FOO'].scheme.should == 'http'
     end
 
