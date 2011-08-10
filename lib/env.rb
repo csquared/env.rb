@@ -6,6 +6,8 @@ class EnvironmentError < StandardError
 end
 
 module Env
+  RACK   = %w{GEM_HOME TMPDIR HTTPS}
+  HEROKU = %w{TMP TEMP} + RACK
   @@dependencies = []
   @@env          = {}
   @@enforced     = false
@@ -27,13 +29,31 @@ module Env
     end
 
     def import(key)
-      export(key, ENV.get(key))  
+      if key.is_a? Symbol
+        const_get(key.to_s.upcase).each { |key| import(key) }
+      else
+        export(key, ENV.get(key))  
+      end
     end
 
     def load!
       @@enforced or Env.enforce
       eval File.read("Envfile") if File.exist?("Envfile")
       File.exist?("Envfile")
+    end
+
+    def unload
+      @@enforced and Env.unenforce
+      @@dependencies = []
+      @@env = {}
+    end
+
+    def unenforce
+      class << ENV
+        alias_method :[], :get  
+        alias_method :[]=, :set
+      end
+      @@enforced = false
     end
 
     def enforce
@@ -54,7 +74,7 @@ module Env
 
     private 
     def _raise(key)
-      raise EnvironmentError, "#{key} is not a declared depency, add it to your Envfile"
+      raise EnvironmentError, "#{key} is not a declared dependency, add it to your Envfile"
     end
 
     def uri?(value)

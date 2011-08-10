@@ -7,6 +7,8 @@ describe Env, '::load!' do
     end
   end
 
+  after { Env.unload }
+
   context "with no Envfile" do
     it "should return false" do
       Env.load!.should be_false
