@@ -50,7 +50,7 @@ describe Env, '::import' do
       Env.load!
     end
 
-    it "should import TMP, TEMP, and RACK" do
+    it "should import TMP, TEMP, and :rack" do
       heroku.each do |var|
         lambda { ENV[var] }.should_not raise_error
       end
