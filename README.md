@@ -22,7 +22,7 @@ your Envfile to a shell-compatible format, and executing scripts within your env
 
 ### Declaring Dependecies
 
-    export "PROVIDER_PASSWORD", '1234', :group => :development, :required => false
+    export "PROVIDER_PASSWORD", '1234', :group => :development
 
     group :development do
       export "SERVICE_URL", 'http://username:password@www.service.com/path"
@@ -32,25 +32,43 @@ your Envfile to a shell-compatible format, and executing scripts within your env
       export "SERVICE_URL", 'http://username:password@example.com/"
     end
 
+    Env.load!                     
+    same as 
+    Env.load! :default
+
+    Env.load! :default, :test
+    ENV['SERVICE_URL']    # => 'http://username:password@example.com/"
+
+    Env.load! :development
+    ENV['SERVICE_URL']    # => 'http://username:password@www.service.com/path"
+
 ### In your Ruby files
 
     require 'env'
 
-    Env.load('../path_to_file')  
+    ENV['HELLO_WORLD']            # => nil
+
     Env.load!                     # look for Envfile
 
-    ENV['HELLO_WORLD']            # => nil
-    Env.enforce
     ENV['HELLO_WORLD']
     # => EnvironmentError: HELLO_WORLD is not a declared dependency
 
     ENV['TEST'] = 'overriding' 
     # => EnvironmentError: TEST is not a declared dependency
 
-    Env.instance_eval do
+    Envfile
+
       export 'TEXT', '15'
-      # same as export 'TEXT', '15', :mutable => false
-    end
+
+    ENV['TEST']  # => 15 
+
+    Envfile
+
+      export 'TEXT', '15', :mutable => false
+        -or-
+      export 'TEXT', '15', :immutable => false
+
+    ENV['TEST']  # => 15 
 
     ENV['TEST'] = 'overriding' 
     # => EnvironmentError: variable TEST cannot be changed
