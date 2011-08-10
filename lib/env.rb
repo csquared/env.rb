@@ -12,10 +12,11 @@ module Env
 
   class << self
     def init
-      @@dependencies = []
-      @@env          = {}
-      @@enforced     = false
-      @@groups       = Hash.new { |hash, key| hash[key] = [] }
+      @@dependencies  = []
+      @@env           = {}
+      @@enforced      = false
+      @@groups        = Hash.new { |hash, key| hash[key] = [] }
+      @@default_group = :default
     end
 
     def [](key)
@@ -38,6 +39,7 @@ module Env
       {:group => @@default_group}
     end
 
+    #store actual work and load group
     def export(key, value = nil, options = {})
       options = export_defaults.merge!(options)
       @@groups[options[:group].to_sym] << lambda do
@@ -46,6 +48,7 @@ module Env
       end
     end
 
+    #only calls itself and export
     def import(key)
       if key.is_a? Symbol
         const_get(key.to_s.upcase).each { |key| import(key) }
