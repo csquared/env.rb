@@ -1,4 +1,4 @@
-require_relative '../lib/env'
+require 'spec_helper'
 
 describe Env, 'uri support' do
   context "with a value FOO that is not a URI" do

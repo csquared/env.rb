@@ -1,12 +1,6 @@
-require_relative '../lib/env'
+require 'spec_helper'
 
 describe Env, '::load!' do
-  def envfile(string)
-    File.open("Envfile", 'w') do |f|
-      f << string
-    end
-  end
-
   after { Env.unload }
 
   context "with no Envfile" do

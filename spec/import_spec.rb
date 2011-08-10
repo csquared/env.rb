@@ -1,16 +1,7 @@
-require_relative '../lib/env'
+require 'spec_helper'
 
 describe Env, '::import' do
-  def envfile(string)
-    File.open("Envfile", 'w') do |f|
-      f << string
-    end
-  end
-
-  after do 
-    File.unlink('Envfile')
-    Env.unload
-  end
+  after { File.unlink('Envfile') }
 
   let(:rack) do
     %w{GEM_HOME TMPDIR HTTPS}

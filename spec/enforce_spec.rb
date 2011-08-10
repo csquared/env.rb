@@ -1,4 +1,4 @@
-require_relative '../lib/env'
+require 'spec_helper'
 
 describe Env, "::enforce" do
   before { Env.enforce }
