@@ -28,7 +28,6 @@ describe Env, "groups" do
   end
 
 
-=begin
   context "in block form" do
     before do
       envfile(%{
@@ -40,5 +39,4 @@ describe Env, "groups" do
 
     it_should_behave_like "handling groups"
   end
-=end
 end

@@ -28,11 +28,18 @@ module Env
       @@env[key] = uri?(value) ? proxify(value) : value
     end
 
-    def group(name, &block)
+    def group(name)
+      @@default_group = name.to_sym
+      yield
+      @@default_group = :default
+    end
+
+    def export_defaults
+      {:group => @@default_group}
     end
 
     def export(key, value = nil, options = {})
-      options = EXPORT_DEFAULTS.dup.merge!(options)
+      options = export_defaults.merge!(options)
       @@groups[options[:group].to_sym] << lambda do
         @@dependencies << key
         @@env[key] = uri?(value) ? proxify(value) : value
