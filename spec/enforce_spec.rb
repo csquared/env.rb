@@ -9,9 +9,10 @@ describe Env, "::enforce" do
 
   context "with uninitialized dependency FOO" do
     before do 
-      Env.instance_eval do
+      envfile(%{
         export 'FOO'
-      end
+      })
+      Env.load!
     end
 
     it "should return nil for ENV['FOO']" do
@@ -26,9 +27,10 @@ describe Env, "::enforce" do
 
   context "with initialized dependency FOO=bar" do
     before do 
-      Env.instance_eval do
+      envfile(%{
         export 'FOO', 'bar'
-      end
+      })
+      Env.load!
     end
 
     it "should return 'bar' for ENV['FOO']" do

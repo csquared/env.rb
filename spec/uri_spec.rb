@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Env, 'uri support' do
   context "with a value FOO that is not a URI" do
     before do
-      Env.instance_eval do
+      envfile(%{
         export 'FOO', 'bar'
-      end
-      Env.enforce
+      })
+      Env.load!
     end
 
     it "should not wrap it" do
@@ -18,10 +18,10 @@ describe Env, 'uri support' do
     URL = 'http://username:password@this.domain.example.com/path?var=val'
 
     before do
-      Env.instance_eval do
+      envfile(%{
         export 'FOO', URL
-      end
-      Env.enforce
+      })
+      Env.load!
     end
 
     it "should leave the original value unchanged" do

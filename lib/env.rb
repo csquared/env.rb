@@ -8,11 +8,16 @@ end
 module Env
   RACK   = %w{GEM_HOME TMPDIR HTTPS}
   HEROKU = %w{TMP TEMP} + RACK
-  @@dependencies = []
-  @@env          = {}
-  @@enforced     = false
+  EXPORT_DEFAULTS = {:group => :default}
 
   class << self
+    def init
+      @@dependencies = []
+      @@env          = {}
+      @@enforced     = false
+      @@groups       = Hash.new { |hash, key| hash[key] = [] }
+    end
+
     def [](key)
       _raise(key) unless dependencies.include? key 
       @@env[key]
@@ -23,9 +28,15 @@ module Env
       @@env[key] = uri?(value) ? proxify(value) : value
     end
 
-    def export(key, value = nil)
-      @@dependencies << key
-      @@env[key] = uri?(value) ? proxify(value) : value
+    def group(name, &block)
+    end
+
+    def export(key, value = nil, options = {})
+      options = EXPORT_DEFAULTS.dup.merge!(options)
+      @@groups[options[:group].to_sym] << lambda do
+        @@dependencies << key
+        @@env[key] = uri?(value) ? proxify(value) : value
+      end
     end
 
     def import(key)
@@ -36,16 +47,23 @@ module Env
       end
     end
 
-    def load!
+    def load_groups(*groups)
+      groups.each do |group|
+        @@groups[group.to_sym].each { |c| c.call }
+      end
+    end
+
+    def load!(*groups)
       @@enforced or Env.enforce
       eval File.read("Envfile") if File.exist?("Envfile")
+      groups = [:default] if groups.empty?
+      load_groups(*groups)
       File.exist?("Envfile")
     end
 
     def unload
       @@enforced and Env.unenforce
-      @@dependencies = []
-      @@env = {}
+      init
     end
 
     def unenforce
@@ -109,3 +127,5 @@ module Env
     end
   end
 end
+
+Env.init
