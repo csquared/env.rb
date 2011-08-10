@@ -20,7 +20,28 @@ your Envfile to a shell-compatible format, and executing scripts within your env
 
 ## Examples
 
-### Declaring Dependecies
+### Explictly declaring your environment
+
+#### Envfile
+    import 'TEST'
+    export 'TEXT', '15'
+
+#### Use
+
+    require 'env'
+
+    ENV['HELLO_WORLD']            # => nil
+    ENV['TEST'] = 5
+    Env.load!                     # look for Envfile
+
+    ENV['HELLO_WORLD']
+    # => EnvironmentError: HELLO_WORLD is not a declared dependency
+
+    ENV['TEST']  # => 5 
+    ENV['TEXT']  # => 15 
+    
+### Groups
+#### Envfile
 
     export "PROVIDER_PASSWORD", '1234', :group => :development
 
@@ -32,8 +53,9 @@ your Envfile to a shell-compatible format, and executing scripts within your env
       export "SERVICE_URL", 'http://username:password@example.com/"
     end
 
+#### Use
     Env.load!                     
-    same as 
+     -same as-
     Env.load! :default
 
     Env.load! :default, :test
@@ -42,31 +64,13 @@ your Envfile to a shell-compatible format, and executing scripts within your env
     Env.load! :development
     ENV['SERVICE_URL']    # => 'http://username:password@www.service.com/path"
 
-### In your Ruby files
+### Mutability
 
-    require 'env'
+#### Envfile
+    export 'TEXT', '15', :mutable => false
+    export 'TEXT', '15', :immutable => false
 
-    ENV['HELLO_WORLD']            # => nil
-
-    Env.load!                     # look for Envfile
-
-    ENV['HELLO_WORLD']
-    # => EnvironmentError: HELLO_WORLD is not a declared dependency
-
-    ENV['TEST'] = 'overriding' 
-    # => EnvironmentError: TEST is not a declared dependency
-
-    Envfile
-
-      export 'TEXT', '15'
-
-    ENV['TEST']  # => 15 
-
-    Envfile
-
-      export 'TEXT', '15', :mutable => false
-        -or-
-      export 'TEXT', '15', :immutable => false
+#### Use
 
     ENV['TEST']  # => 15 
 
@@ -75,10 +79,10 @@ your Envfile to a shell-compatible format, and executing scripts within your env
 
 ## Built-in support for URIs
 
-### in Envfile
+### Envfile
     export "SERVICE",     'http://username:password@example.com/"
 
-### in your Ruby Script 
+### Use
     ENV['SERVICE']             #=> 'http://username:password@example.com/"
     ENV['SERVICE'].base_uri    #=> 'http://example.com/"
     ENV['SERVICE'].url         #=> 'http://example.com/"
