@@ -17,6 +17,7 @@ module Env
       @@enforced      = false
       @@groups        = Hash.new { |hash, key| hash[key] = [] }
       @@default_group = :default
+      @@callback      = nil
     end
 
     def [](key)
@@ -63,7 +64,8 @@ module Env
       end
     end
 
-    def load!(*groups)
+    def load!(*groups, &block)
+      @@callback = block if block_given? 
       @@enforced or Env.enforce
       eval File.read("Envfile") if File.exist?("Envfile")
       groups = [:default] if groups.empty?
@@ -102,6 +104,7 @@ module Env
 
     private 
     def _raise(key)
+      return @@callback.call(key) if @@callback
       raise EnvironmentError, "#{key} is not a declared dependency, add it to your Envfile"
     end
 
