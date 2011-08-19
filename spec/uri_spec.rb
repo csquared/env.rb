@@ -15,7 +15,7 @@ describe Env, 'uri support' do
   end
 
   context "with a value FOO that is a URI" do
-    URL = 'http://username:password@this.domain.example.com/path?var=val'
+    URL = 'http://username:password@this.domain.example.com:3000/path?var=val'
 
     before do
       envfile(%{
@@ -47,6 +47,10 @@ describe Env, 'uri support' do
 
     it "should respond to #user with the user" do
       ENV['FOO'].user.should == 'username'
+    end
+
+    it "should respond to #port with the port" do
+      ENV['FOO'].port.should == 3000
     end
   end
 end

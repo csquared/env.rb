@@ -123,7 +123,7 @@ module Env
 
   class UriProxy < BasicObject
     extend ::Forwardable
-    def_delegators :@uri, :scheme, :user, :password, :host
+    def_delegators :@uri, :scheme, :user, :password, :host, :port
 
     def initialize(uri)
       @original = uri
